@@ -14,7 +14,10 @@
   "license": "ISC",
   "type": "module",
   "engines": {
-    "node": "20.x"
+    "node": "24.x"
+  },
+  "overrides": {
+    "jose": "^4.15.9"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
