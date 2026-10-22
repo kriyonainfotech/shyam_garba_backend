@@ -1,6 +1,12 @@
 import express from 'express';
 import cors from 'cors';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { UPLOAD_DIR } from './config/paths.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const PUBLIC_UPLOADS = path.resolve(__dirname, '../public/uploads');
 import connectDB from './config/db.js';
 import { releaseExpiredBookings } from './utils/bookings.js';
 import { razorpayWebhook } from './controllers/bookingController.js';
@@ -55,7 +61,8 @@ app.post('/api/payments/webhook', express.raw({ type: 'application/json' }), raz
 // Parse JSON request bodies into req.body
 app.use(express.json());
 
-// Uploaded images (member photos, event banners)
+// Uploaded images (member photos, event banners, site assets)
+app.use('/uploads', express.static(PUBLIC_UPLOADS));
 app.use('/uploads', express.static(UPLOAD_DIR));
 
 // Root route for quick health/status check in browser
