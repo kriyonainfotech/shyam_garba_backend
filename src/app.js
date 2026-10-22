@@ -1,12 +1,12 @@
 import express from 'express';
 import cors from 'cors';
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { UPLOAD_DIR } from './config/paths.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const PUBLIC_UPLOADS = path.resolve(__dirname, '../public/uploads');
 import connectDB from './config/db.js';
 import { releaseExpiredBookings } from './utils/bookings.js';
 import { razorpayWebhook } from './controllers/bookingController.js';
@@ -62,8 +62,29 @@ app.post('/api/payments/webhook', express.raw({ type: 'application/json' }), raz
 app.use(express.json());
 
 // Uploaded images (member photos, event banners, site assets)
-app.use('/uploads', express.static(PUBLIC_UPLOADS));
-app.use('/uploads', express.static(UPLOAD_DIR));
+const possibleUploadDirs = [
+  path.join(process.cwd(), 'public', 'uploads'),
+  path.join(process.cwd(), 'uploads'),
+  path.resolve(__dirname, '../public/uploads'),
+  path.resolve(__dirname, '../../uploads'),
+  UPLOAD_DIR,
+].filter(Boolean);
+
+for (const dir of possibleUploadDirs) {
+  app.use('/uploads', express.static(dir));
+}
+
+// Explicit fallback handler for uploaded assets
+app.get('/uploads/:folder/:file', (req, res, next) => {
+  const { folder, file } = req.params;
+  for (const baseDir of possibleUploadDirs) {
+    const fullPath = path.join(baseDir, folder, file);
+    if (fs.existsSync(fullPath)) {
+      return res.sendFile(fullPath);
+    }
+  }
+  next();
+});
 
 // Root route for quick health/status check in browser
 app.get('/', (req, res) => {

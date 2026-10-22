@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="120" viewBox="0 0 300 120">
+  <rect x="19" y="34" width="52" height="52" rx="12" fill="#f47920"/>
+  <text x="45" y="69" text-anchor="middle" font-family="Arial Black, Segoe UI, sans-serif" font-size="24" font-weight="900" fill="#fff">1</text>
+  <text x="86" y="62" font-family="Arial Black, Segoe UI, sans-serif" font-size="34" font-weight="900" fill="#ffffff">BRAND</text>
+  <text x="88" y="88" font-family="Segoe UI, Arial, sans-serif" font-size="15" letter-spacing="4" fill="#555">SPONSOR 1</text>
+</svg>
