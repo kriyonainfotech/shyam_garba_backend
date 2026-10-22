@@ -1,9 +1,4 @@
 {
-  "functions": {
-    "api/index.js": {
-      "runtime": "nodejs20.x"
-    }
-  },
   "rewrites": [
     {
       "source": "/(.*)",
@@ -11,4 +6,3 @@
     }
   ]
 }
-
